@@ -5,6 +5,7 @@ import type { ZxcvbnResult } from "@zxcvbn-ts/core/src/types";
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnJaPackage from "@zxcvbn-ts/language-ja";
 import { handleSignUp, handleSignIn } from "../../auth/auth";
+import { validateUserForm, getPasswordWarning } from "../../utils/validation";
 
 // Zxcvbnの初期設定 //
 zxcvbnOptions.setOptions({
@@ -59,6 +60,8 @@ export const AuthModal = ({
 	mode: "signin" | "signup";
 }) => {
 	const [user, setUser] = useState({
+		name: "",
+		id: "",
 		email: "",
 		password: "",
 	});
@@ -109,17 +112,21 @@ export const AuthModal = ({
 	// フォームが変更されたときにエラーをクリア
 	useEffect(() => {
 		setError(null);
-	}, [user.email, user.password]);
+	}, [user.email, user.password, user.name, user.id]);
 
 	const isSignUp = mode === "signup";
 	const title = isSignUp ? "新規登録" : "ログイン";
 	const buttonText = isSignUp ? "登録" : "ログイン";
+
+	// バリデーションエラーを取得
+	const currentValidationErrors = validateUserForm(user, isSignUp);
 
 	// ボタンの無効化条件 //
 	const isButtonDisabled =
 		!user.email ||
 		user.password.length < 8 ||
 		(isSignUp && zxcvbnResult !== null && zxcvbnResult.score < 2) ||
+		currentValidationErrors.length > 0 ||
 		isLoading;
 
 	return (
@@ -134,6 +141,36 @@ export const AuthModal = ({
 				<h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">{title}</h1>
 
 				<form className="space-y-4" onSubmit={handleSubmit}>
+					{isSignUp && (
+						<>
+							<input
+								type="text"
+								placeholder="Nickname"
+								className="w-full p-2 border border-gray-300 rounded-md"
+								value={user.name}
+								onChange={(e) => setUser({ ...user, name: e.target.value })}
+								aria-label="Nickname"
+								minLength={2}
+								maxLength={10}
+								required
+								disabled={isLoading}
+							/>
+							<input
+								type="text"
+								placeholder="ID"
+								className="w-full p-2 border border-gray-300 rounded-md"
+								value={user.id}
+								onChange={(e) => setUser({ ...user, id: e.target.value })}
+								aria-label="ID"
+								minLength={5}
+								maxLength={16}
+								pattern="^[a-zA-Z0-9]+$"
+								required
+								disabled={isLoading}
+							/>
+						</>
+					)}
+
 					<input
 						type="email"
 						placeholder="Email"
@@ -159,9 +196,16 @@ export const AuthModal = ({
 					{/* パスワード強度チェックは登録時のみ表示 */}
 					{isSignUp && <PasswordStrengthBar zxcvbnResult={zxcvbnResult} />}
 
-					{/* feedback.warning がある場合は表示（新規登録時のみ） */}
-					{isSignUp && zxcvbnResult?.feedback?.warning && (
-						<div className="text-[#f00]">{zxcvbnResult.feedback.warning}</div>
+					{/* バリデーションエラー */}
+					{currentValidationErrors.map((validationError, index) => (
+						<div key={index} className="text-[#f00] text-sm">
+							{validationError.message}
+						</div>
+					))}
+
+					{/* パスワード強度の警告 */}
+					{isSignUp && getPasswordWarning(zxcvbnResult) && (
+						<div className="text-[#f00] text-sm">{getPasswordWarning(zxcvbnResult)}</div>
 					)}
 
 					{/* 認証エラーの表示 */}
