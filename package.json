@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
+    "@zxcvbn-ts/core": "^3.0.4",
+    "@zxcvbn-ts/language-common": "^3.0.4",
+    "@zxcvbn-ts/language-ja": "^3.0.2",
     "dotenv": "^17.0.1",
     "firebase": "^11.10.0",
     "react": "^19.1.0",

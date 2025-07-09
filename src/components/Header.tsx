@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { SignUpModal, SignInModal } from "./modal/AuthModal";
+import { AuthModal } from "./modal/AuthModal";
 
 const Header: React.FC = () => {
-	const [isOpenModalId, setIsOpenModalId] = useState<string | null>(null);
+	const [isOpenModalId, setIsOpenModalId] = useState<string | null>("signup"); // Default: null but if development, set to "signin"
 
 	return (
 		<header className="bg-white shadow-md">
@@ -12,10 +12,20 @@ const Header: React.FC = () => {
 					<Link to="/">Codeal</Link>
 				</div>
 				<nav className="space-x-4">
-					<button onClick={() => setIsOpenModalId("signup")}>SignUp</button>
-					<SignUpModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} />
-					<button onClick={() => setIsOpenModalId("signin")}>SignIn</button>
-					<SignInModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} />
+					<button
+						onClick={() => setIsOpenModalId("signup")}
+						className="cursor-pointer hover:text-gray-500 transition-colors"
+					>
+						SignUp
+					</button>
+					<AuthModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} mode="signup" />
+					<button
+						onClick={() => setIsOpenModalId("signin")}
+						className="cursor-pointer hover:text-gray-500 transition-colors"
+					>
+						SignIn
+					</button>
+					<AuthModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} mode="signin" />
 				</nav>
 			</div>
 		</header>
