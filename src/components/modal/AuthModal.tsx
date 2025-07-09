@@ -86,8 +86,8 @@ export const AuthModal = ({
 		!user.email || user.password.length < 8 || (isSignUp && zxcvbnResult !== null && zxcvbnResult.score < 2);
 
 	return (
-		<Modal isOpen={isOpenModalId === mode}>
-			<div className="relative bg-white rounded-lg p-8 w-full max-w-md mx-auto">
+		<Modal isOpen={isOpenModalId === mode} onClose={() => setIsModalOpen(null)}>
+			<div className="relative bg-white rounded-lg p-8 w-full max-w-md mx-auto" onClick={(e) => e.stopPropagation()}>
 				<button
 					className="absolute top-2 right-4 z-[999] p-1 text-black hover:text-gray-700 transition-colors cursor-pointer"
 					onClick={() => setIsModalOpen(null)}
