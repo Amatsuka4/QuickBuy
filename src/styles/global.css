@@ -1,0 +1,14 @@
+.ReactModal__Overlay {
+  opacity: 0;
+  -webkit-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+/*# sourceMappingURL=global.css.map */
