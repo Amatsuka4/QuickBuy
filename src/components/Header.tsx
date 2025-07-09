@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AuthModal } from "./modal/AuthModal";
 
 const Header: React.FC = () => {
-	const [isOpenModalId, setIsOpenModalId] = useState<string | null>("signup"); // Default: null but if development, set to "signin"
+	const [isOpenModalId, setIsOpenModalId] = useState<string | null>(null); // Default: null but if development, set to "signin"
 
 	return (
 		<header className="bg-white shadow-md">
