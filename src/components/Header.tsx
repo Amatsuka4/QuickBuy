@@ -21,7 +21,10 @@ export default function Header() {
 						</h1>
 						<button
 							className="cursor-pointer hover:text-gray-500 transition-colors"
-							onClick={() => auth.signOut()}
+							onClick={() => {
+								auth.signOut();
+								window.location.reload();
+							}}
 						>
 							SignOut
 						</button>

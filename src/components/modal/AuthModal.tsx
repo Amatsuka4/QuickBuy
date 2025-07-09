@@ -76,9 +76,11 @@ export const AuthModal = ({
 			switch (mode) {
 				case "signup":
 					result = await handleSignUp(user.email, user.password);
+					if (result.success) window.location.reload();
 					break;
 				case "signin":
 					result = await handleSignIn(user.email, user.password);
+					if (result.success) window.location.reload();
 					break;
 			}
 
