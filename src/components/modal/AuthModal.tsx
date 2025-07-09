@@ -4,6 +4,7 @@ import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
 import type { ZxcvbnResult } from "@zxcvbn-ts/core/src/types";
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnJaPackage from "@zxcvbn-ts/language-ja";
+import { handleSignUp, handleSignIn } from "../../auth/auth";
 
 // Zxcvbnの初期設定 //
 zxcvbnOptions.setOptions({
@@ -62,10 +63,36 @@ export const AuthModal = ({
 		password: "",
 	});
 	const [zxcvbnResult, setZxcvbnResult] = useState<ZxcvbnResult | null>(null);
+	const [error, setError] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log(user);
+		setError(null);
+		setIsLoading(true);
+
+		try {
+			let result;
+			switch (mode) {
+				case "signup":
+					result = await handleSignUp(user.email, user.password);
+					break;
+				case "signin":
+					result = await handleSignIn(user.email, user.password);
+					break;
+			}
+
+			if (result.success) {
+				setIsModalOpen(null);
+				// 成功時の処理（必要に応じて追加）
+			} else {
+				setError(result.error || "認証に失敗しました");
+			}
+		} catch (err) {
+			setError("予期しないエラーが発生しました");
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	useEffect(() => {
@@ -77,13 +104,21 @@ export const AuthModal = ({
 		setZxcvbnResult(zxcvbn(user.password));
 	}, [user.password]);
 
+	// フォームが変更されたときにエラーをクリア
+	useEffect(() => {
+		setError(null);
+	}, [user.email, user.password]);
+
 	const isSignUp = mode === "signup";
 	const title = isSignUp ? "新規登録" : "ログイン";
 	const buttonText = isSignUp ? "登録" : "ログイン";
 
 	// ボタンの無効化条件 //
 	const isButtonDisabled =
-		!user.email || user.password.length < 8 || (isSignUp && zxcvbnResult !== null && zxcvbnResult.score < 2);
+		!user.email ||
+		user.password.length < 8 ||
+		(isSignUp && zxcvbnResult !== null && zxcvbnResult.score < 2) ||
+		isLoading;
 
 	return (
 		<Modal isOpen={isOpenModalId === mode} onClose={() => setIsModalOpen(null)}>
@@ -95,6 +130,7 @@ export const AuthModal = ({
 					X
 				</button>
 				<h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">{title}</h1>
+
 				<form className="space-y-4" onSubmit={handleSubmit}>
 					<input
 						type="email"
@@ -104,6 +140,7 @@ export const AuthModal = ({
 						onChange={(e) => setUser({ ...user, email: e.target.value })}
 						aria-label="Email"
 						required
+						disabled={isLoading}
 					/>
 					<input
 						type="password"
@@ -114,6 +151,7 @@ export const AuthModal = ({
 						maxLength={32}
 						aria-label="Password"
 						required
+						disabled={isLoading}
 					/>
 
 					{/* パスワード強度チェックは登録時のみ表示 */}
@@ -124,19 +162,25 @@ export const AuthModal = ({
 						<div className="text-[#f00]">{zxcvbnResult.feedback.warning}</div>
 					)}
 
+					{/* 認証エラーの表示 */}
+					{error && <div className="text-[#f00]">{error}</div>}
+
 					<button
 						type="submit"
 						className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
 						disabled={isButtonDisabled}
 					>
-						{buttonText}
+						{isLoading ? "処理中..." : buttonText}
 					</button>
 				</form>
 
 				<div className="mt-[20px] flex justify-end">
 					<button
 						onClick={() => setIsModalOpen(mode === "signup" ? "signin" : "signup")}
-						className="text-sm text-blue-600 text-gray-500 hover:text-blue-700 transition-colors cursor-pointer"
+						className={`text-sm text-blue-600 text-gray-500 hover:text-blue-700 transition-colors ${
+							isLoading ? "cursor-not-allowed" : "cursor-pointer"
+						}`}
+						disabled={isLoading}
 					>
 						{mode === "signup" ? "アカウントをお持ちですか？" : "アカウントを作成しますか？"}
 					</button>

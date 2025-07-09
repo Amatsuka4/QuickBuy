@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthModal } from "./modal/AuthModal";
+import { useAuthContext } from "../contexts/AuthContext";
+import { auth } from "../firebase";
 
-const Header: React.FC = () => {
-	const [isOpenModalId, setIsOpenModalId] = useState<string | null>(null); // Default: null but if development, set to "signin"
+export default function Header() {
+	const [isOpenModalId, setIsOpenModalId] = useState<string | null>(null);
+	const { user, isLoading } = useAuthContext();
 
 	return (
 		<header className="bg-white shadow-md">
@@ -11,25 +14,37 @@ const Header: React.FC = () => {
 				<div className="text-2xl font-bold text-gray-700 underline italic">
 					<Link to="/">Codeal</Link>
 				</div>
-				<nav className="space-x-4">
-					<button
-						onClick={() => setIsOpenModalId("signup")}
-						className="cursor-pointer hover:text-gray-500 transition-colors"
-					>
-						SignUp
-					</button>
-					<AuthModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} mode="signup" />
-					<button
-						onClick={() => setIsOpenModalId("signin")}
-						className="cursor-pointer hover:text-gray-500 transition-colors"
-					>
-						SignIn
-					</button>
-					<AuthModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} mode="signin" />
-				</nav>
+				{isLoading ? null : user ? (
+					<nav className="flex items-center space-x-4">
+						<h1 className="text-gray-700">
+							Welcome, <span className="font-bold">{user.email}</span>
+						</h1>
+						<button
+							className="cursor-pointer hover:text-gray-500 transition-colors"
+							onClick={() => auth.signOut()}
+						>
+							SignOut
+						</button>
+					</nav>
+				) : (
+					<nav className="space-x-4">
+						<button
+							onClick={() => setIsOpenModalId("signup")}
+							className="cursor-pointer hover:text-gray-500 transition-colors"
+						>
+							SignUp
+						</button>
+						<AuthModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} mode="signup" />
+						<button
+							onClick={() => setIsOpenModalId("signin")}
+							className="cursor-pointer hover:text-gray-500 transition-colors"
+						>
+							SignIn
+						</button>
+						<AuthModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} mode="signin" />
+					</nav>
+				)}
 			</div>
 		</header>
 	);
-};
-
-export default Header;
+}

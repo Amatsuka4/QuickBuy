@@ -1,13 +1,48 @@
 import { auth } from "../firebase.ts";
-import {
-	createUserWithEmailAndPassword,
-	signInWithEmailAndPassword,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import type { AuthError } from "firebase/auth";
 
-export function handleSignUp(email: string, password: string) {
-	return createUserWithEmailAndPassword(auth, email, password);
+// エラーメッセージを日本語に変換する関数
+const getErrorMessage = (error: AuthError): string => {
+	switch (error.code) {
+		case "auth/email-already-exists":
+			return "このメールアドレスは既に使用されています。";
+		case "auth/invalid-credential":
+			return "メールアドレスかパスワードが間違っています。";
+		case "auth/user-not-found":
+			return "アカウントが存在しません。";
+		case "auth/too-many-requests":
+			return "リクエストが多すぎます。しばらく時間をおいてから再試行してください。";
+		case "auth/invalid-email":
+			return "無効なメールアドレスです。";
+		case "auth/invalid-password":
+			return "パスワードが間違っています。";
+		default:
+			return `認証エラーが発生しました。エラーコード: ${error.code}`;
+	}
+};
+
+export async function handleSignUp(email: string, password: string): Promise<{ success: boolean; error?: string }> {
+	try {
+		await createUserWithEmailAndPassword(auth, email, password);
+		return { success: true };
+	} catch (error) {
+		if (error instanceof FirebaseError) {
+			return { success: false, error: getErrorMessage(error as AuthError) };
+		}
+		return { success: false, error: "予期しない認証エラーが発生しました" };
+	}
 }
 
-export function handleSignIn(email: string, password: string) {
-	return signInWithEmailAndPassword(auth, email, password);
+export async function handleSignIn(email: string, password: string): Promise<{ success: boolean; error?: string }> {
+	try {
+		await signInWithEmailAndPassword(auth, email, password);
+		return { success: true };
+	} catch (error) {
+		if (error instanceof FirebaseError) {
+			return { success: false, error: getErrorMessage(error as AuthError) };
+		}
+		return { success: false, error: "予期しない認証エラーが発生しました" };
+	}
 }
