@@ -1,0 +1,7 @@
+{
+    "plugins": ["@typescript-eslint", "react", "simple-import-sort"],
+    "rules": {
+        "simple-import-sort/imports": ["error"],
+        "react/react-in-jsx-scope": "off"
+    }
+}
