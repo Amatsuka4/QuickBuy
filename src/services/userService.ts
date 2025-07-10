@@ -1,5 +1,5 @@
-import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import type { UserProfile } from "../types/user";
 
 // ユーザープロファイルを取得する関数 //

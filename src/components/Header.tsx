@@ -1,8 +1,8 @@
+import { auth } from "../firebase";
+import { useAuthContext } from "../contexts/AuthContext";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthModal } from "./modal/AuthModal";
-import { useAuthContext } from "../contexts/AuthContext";
-import { auth } from "../firebase";
 
 export default function Header() {
 	const [isOpenModalId, setIsOpenModalId] = useState<string | null>(null);
@@ -34,14 +34,14 @@ export default function Header() {
 					<nav className="space-x-4">
 						<button
 							onClick={() => setIsOpenModalId("signup")}
-							className="cursor-pointer hover:text-gray-500 transition-colors"
+							className="cursor-pointer hover:text-gray-500 transition-colors bg-blue-500 text-white px-4 py-2 rounded-md"
 						>
 							SignUp
 						</button>
 						<AuthModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} mode="signup" />
 						<button
 							onClick={() => setIsOpenModalId("signin")}
-							className="cursor-pointer hover:text-gray-500 transition-colors"
+							className="cursor-pointer hover:text-gray-500 transition-colors bg-blue-500 text-white px-4 py-2 rounded-md"
 						>
 							SignIn
 						</button>

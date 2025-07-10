@@ -1,5 +1,5 @@
-import type { FC, ReactNode } from "react";
 import ReactModal from "react-modal";
+import type { FC, ReactNode } from "react";
 
 interface Props {
 	isOpen: boolean;
