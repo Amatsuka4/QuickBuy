@@ -1,5 +1,6 @@
-import { auth } from "../firebase.ts";
+import { auth, db } from "../firebase.ts";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { setDoc, doc, serverTimestamp, getDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 import type { AuthError } from "firebase/auth";
 
@@ -16,6 +17,8 @@ const getErrorMessage = (error: AuthError): string => {
 			return "リクエストが多すぎます。しばらく時間をおいてから再試行してください。";
 		case "auth/invalid-email":
 			return "無効なメールアドレスです。";
+		case "auth/email-already-in-use":
+			return "このメールアドレスは既に使用されています。";
 		case "auth/invalid-password":
 			return "パスワードが間違っています。";
 		default:
@@ -23,9 +26,26 @@ const getErrorMessage = (error: AuthError): string => {
 	}
 };
 
-export async function handleSignUp(email: string, password: string): Promise<{ success: boolean; error?: string }> {
+// 新規登録 //
+export async function handleSignUp(email: string, password: string, name: string, id: string): Promise<{ success: boolean; error?: string }> {
 	try {
-		await createUserWithEmailAndPassword(auth, email, password);
+		// IDチェック
+		const usernameRef = doc(db, "usernames", id);
+		const usernameSnap = await getDoc(usernameRef);
+		if (usernameSnap.exists()) {
+			return { success: false, error: "このIDは既に使用されています。" };
+		}
+
+		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+		const uid = userCredential.user.uid;
+
+		await setDoc(doc(db, "users", uid), {
+			displayName: name,
+			userId: id,
+			createdAt: serverTimestamp(),
+		});
+		await setDoc(usernameRef, { uid }, { merge: false });
+
 		return { success: true };
 	} catch (error) {
 		if (error instanceof FirebaseError) {
@@ -35,6 +55,8 @@ export async function handleSignUp(email: string, password: string): Promise<{ s
 	}
 }
 
+
+// ログイン //
 export async function handleSignIn(email: string, password: string): Promise<{ success: boolean; error?: string }> {
 	try {
 		await signInWithEmailAndPassword(auth, email, password);

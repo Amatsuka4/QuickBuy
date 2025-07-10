@@ -78,18 +78,16 @@ export const AuthModal = ({
 			let result;
 			switch (mode) {
 				case "signup":
-					result = await handleSignUp(user.email, user.password);
-					if (result.success) window.location.reload();
+					result = await handleSignUp(user.email, user.password, user.name, user.id);
 					break;
 				case "signin":
 					result = await handleSignIn(user.email, user.password);
-					if (result.success) window.location.reload();
 					break;
 			}
 
 			if (result.success) {
 				setIsModalOpen(null);
-				// 成功時の処理（必要に応じて追加）
+				window.location.reload();
 			} else {
 				setError(result.error || "認証に失敗しました");
 			}
