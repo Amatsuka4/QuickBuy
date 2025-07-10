@@ -4,7 +4,7 @@ import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
 import type { ZxcvbnResult } from "@zxcvbn-ts/core/src/types";
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnJaPackage from "@zxcvbn-ts/language-ja";
-import { handleSignUp, handleSignIn } from "../../auth/auth";
+import { signUpService, signInService } from "../../services/authService";
 import { validateUserForm, getPasswordWarning } from "../../utils/validation";
 
 // Zxcvbnの初期設定 //
@@ -78,10 +78,10 @@ export const AuthModal = ({
 			let result;
 			switch (mode) {
 				case "signup":
-					result = await handleSignUp(user.email, user.password, user.name, user.id);
+					result = await signUpService(user.email, user.password, user.name, user.id);
 					break;
 				case "signin":
-					result = await handleSignIn(user.email, user.password);
+					result = await signInService(user.email, user.password);
 					break;
 			}
 

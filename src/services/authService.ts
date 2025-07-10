@@ -1,10 +1,10 @@
-import { auth, db } from "../firebase.ts";
+import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc, serverTimestamp, getDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 import type { AuthError } from "firebase/auth";
 
-// エラーメッセージを日本語に変換する関数
+// エラーメッセージを日本語に変換する関数 //
 const getErrorMessage = (error: AuthError): string => {
 	switch (error.code) {
 		case "auth/email-already-exists":
@@ -26,10 +26,10 @@ const getErrorMessage = (error: AuthError): string => {
 	}
 };
 
-// 新規登録 //
-export async function handleSignUp(email: string, password: string, name: string, id: string): Promise<{ success: boolean; error?: string }> {
+// 新規登録サービス //
+export async function signUpService(email: string, password: string, name: string, id: string): Promise<{ success: boolean; error?: string }> {
 	try {
-		// ID予約チェック
+		// ID予約チェック //
 		const usernameRef = doc(db, "usernames", id);
 		const usernameSnap = await getDoc(usernameRef);
 		if (usernameSnap.exists()) {
@@ -56,9 +56,8 @@ export async function handleSignUp(email: string, password: string, name: string
 	}
 }
 
-
-// ログイン //
-export async function handleSignIn(email: string, password: string): Promise<{ success: boolean; error?: string }> {
+// ログインサービス //
+export async function signInService(email: string, password: string): Promise<{ success: boolean; error?: string }> {
 	try {
 		await signInWithEmailAndPassword(auth, email, password);
 		return { success: true };

@@ -1,18 +1,18 @@
 import type { UserFormData } from "../types/user";
 
-// バリデーションエラーの型定義
+// バリデーションエラーの型定義 //
 export interface ValidationError {
 	field: string;
 	message: string;
 }
 
-// バリデーション関数
+// ユーザーフォームバリデーションサービス //
 export const validateUserForm = (user: UserFormData, isSignUp: boolean): ValidationError[] => {
 	const errors: ValidationError[] = [];
 
-	// 新規登録時のみのバリデーション
+	// 新規登録時のみのバリデーション //
 	if (isSignUp) {
-		// ニックネームのバリデーション
+		// ニックネームのバリデーション //
 		if (user.name.length > 0 && user.name.length < 2) {
 			errors.push({
 				field: 'name',
@@ -20,7 +20,7 @@ export const validateUserForm = (user: UserFormData, isSignUp: boolean): Validat
 			});
 		}
 
-		// IDのバリデーション
+		// IDのバリデーション //
 		if (user.id.length > 0) {
 			if (user.id.length < 5) {
 				errors.push({
@@ -48,7 +48,7 @@ export const validateUserForm = (user: UserFormData, isSignUp: boolean): Validat
 	return errors;
 };
 
-// パスワード強度の警告メッセージを取得する関数
+// パスワード強度の警告メッセージを取得するサービス //
 export const getPasswordWarning = (zxcvbnResult: any): string | null => {
 	return zxcvbnResult?.feedback?.warning || null;
-};
+}; 
