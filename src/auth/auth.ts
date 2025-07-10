@@ -29,7 +29,7 @@ const getErrorMessage = (error: AuthError): string => {
 // 新規登録 //
 export async function handleSignUp(email: string, password: string, name: string, id: string): Promise<{ success: boolean; error?: string }> {
 	try {
-		// IDチェック
+		// ID予約チェック
 		const usernameRef = doc(db, "usernames", id);
 		const usernameSnap = await getDoc(usernameRef);
 		if (usernameSnap.exists()) {
@@ -44,6 +44,7 @@ export async function handleSignUp(email: string, password: string, name: string
 			userId: id,
 			createdAt: serverTimestamp(),
 		});
+
 		await setDoc(usernameRef, { uid }, { merge: false });
 
 		return { success: true };

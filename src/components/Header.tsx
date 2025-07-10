@@ -6,7 +6,7 @@ import { auth } from "../firebase";
 
 export default function Header() {
 	const [isOpenModalId, setIsOpenModalId] = useState<string | null>(null);
-	const { user, isLoading } = useAuthContext();
+	const { user, userProfile, isLoading } = useAuthContext();
 
 	return (
 		<header className="bg-white shadow-md">
@@ -16,9 +16,10 @@ export default function Header() {
 				</div>
 				{isLoading ? null : user ? (
 					<nav className="flex items-center space-x-4">
-						<h1 className="text-gray-700">
-							Welcome, <span className="font-bold">{user.email}</span>
-						</h1>
+						<div className="text-gray-700">
+							<h1 className="font-bold">{userProfile?.displayName}</h1>
+							{userProfile?.userId && <p className="text-sm text-gray-500">@{userProfile.userId}</p>}
+						</div>
 						<button
 							className="cursor-pointer hover:text-gray-500 transition-colors"
 							onClick={() => {
