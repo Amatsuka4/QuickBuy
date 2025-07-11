@@ -3,6 +3,8 @@ import { useAuthContext } from "../contexts/AuthContext";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import Avatar from "./Avatar";
+import { Link } from "react-router-dom";
+import shortenMailAddress from "../utils/shortenMailAddres";
 
 export default function UserMenuDropdown({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
 	const { user, userProfile } = useAuthContext();
@@ -51,20 +53,6 @@ export default function UserMenuDropdown({ isOpen, onClose }: { isOpen: boolean;
 		}
 	}, [onClose]);
 
-	// プロフィールボタンのクリック
-	const handleProfileClick = useCallback(() => {
-		// プロフィールページへの遷移処理をここに追加
-		console.log("プロフィールページへ遷移");
-		onClose();
-	}, [onClose]);
-
-	// 設定ボタンのクリック
-	const handleSettingsClick = useCallback(() => {
-		// 設定ページへの遷移処理をここに追加
-		console.log("設定ページへ遷移");
-		onClose();
-	}, [onClose]);
-
 	if (!isOpen) {
 		return null;
 	}
@@ -85,18 +73,19 @@ export default function UserMenuDropdown({ isOpen, onClose }: { isOpen: boolean;
 							{userProfile?.displayName || "ユーザー"}
 						</p>
 						<p className="text-xs text-gray-500 truncate">@{userProfile?.userId || "user"}</p>
-						<p className="text-xs text-gray-500 truncate">{user?.email}</p>
+						<p className="text-xs text-gray-500 truncate">{shortenMailAddress(user?.email || "")}</p>
 					</div>
 				</div>
 			</div>
 
 			{/* メニューアイテム */}
 			<div className="py-1">
-				<button
-					onClick={handleProfileClick}
+				<Link
+					to="/mypage"
 					className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 cursor-pointer focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
 					role="menuitem"
 					tabIndex={0}
+					onClick={onClose}
 				>
 					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
@@ -106,14 +95,15 @@ export default function UserMenuDropdown({ isOpen, onClose }: { isOpen: boolean;
 							d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
 						/>
 					</svg>
-					<span>プロフィール</span>
-				</button>
+					<span>マイページ</span>
+				</Link>
 
-				<button
-					onClick={handleSettingsClick}
+				<Link
+					to="/settings"
 					className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 cursor-pointer focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
 					role="menuitem"
 					tabIndex={0}
+					onClick={onClose}
 				>
 					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
@@ -130,16 +120,17 @@ export default function UserMenuDropdown({ isOpen, onClose }: { isOpen: boolean;
 						/>
 					</svg>
 					<span>設定</span>
-				</button>
+				</Link>
 
 				{/* 区切り線 */}
 				<div className="border-t border-gray-100 my-1"></div>
 
-				<button
-					onClick={handleSignOut}
+				<Link
+					to="/"
 					className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2 cursor-pointer focus:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-inset"
 					role="menuitem"
 					tabIndex={0}
+					onClick={handleSignOut}
 				>
 					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
@@ -150,7 +141,7 @@ export default function UserMenuDropdown({ isOpen, onClose }: { isOpen: boolean;
 						/>
 					</svg>
 					<span>ログアウト</span>
-				</button>
+				</Link>
 			</div>
 		</div>
 	);

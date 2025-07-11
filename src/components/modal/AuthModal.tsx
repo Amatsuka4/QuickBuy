@@ -5,7 +5,7 @@ import type { ZxcvbnResult } from "@zxcvbn-ts/core/src/types";
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnJaPackage from "@zxcvbn-ts/language-ja";
 import { signUpService, signInService } from "../../services/authService";
-import { validateUserForm, getPasswordWarning } from "../../utils/validation";
+import { validateUserForm, getPasswordWarning } from "../../utils/validationCheck";
 
 // Zxcvbnの初期設定 //
 zxcvbnOptions.setOptions({
