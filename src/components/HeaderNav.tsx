@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import { AuthModal } from "./modal/AuthModal";
-import UserMenuModal from "./modal/UserMenuModal";
-import { SignOutButton } from "./HeaderButtonSignOut";
+import UserMenuDropdown from "./HeaderUserMenuDropdown";
 import type { User } from "firebase/auth";
 
 interface AuthNavigationProps {
@@ -10,6 +9,7 @@ interface AuthNavigationProps {
 }
 
 export function AuthNavigation({ user }: AuthNavigationProps) {
+	const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 	const [isOpenModalId, setIsOpenModalId] = useState<string | null>(null);
 	const { userProfile } = useAuthContext();
 
@@ -17,14 +17,15 @@ export function AuthNavigation({ user }: AuthNavigationProps) {
 		// ログイン時のナビゲーション
 		return (
 			<nav className="flex items-center space-x-4">
-				<img
-					src={userProfile?.iconUrl}
-					alt="avatar"
-					className="w-8 h-8 rounded-full cursor-pointer"
-					onClick={() => setIsOpenModalId("usermenu")}
-				/>
-				<UserMenuModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} />
-				<SignOutButton />
+				<div className="relative">
+					<img
+						src={userProfile?.iconUrl}
+						alt="avatar"
+						className="w-8 h-8 rounded-full cursor-pointer"
+						onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+					/>
+					<UserMenuDropdown isOpen={isUserMenuOpen} onClose={() => setIsUserMenuOpen(false)} />
+				</div>
 			</nav>
 		);
 	}

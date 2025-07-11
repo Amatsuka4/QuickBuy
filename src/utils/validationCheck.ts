@@ -22,10 +22,10 @@ export const validateUserForm = (user: UserFormData, isSignUp: boolean): Validat
 
 		// IDのバリデーション //
 		if (user.id.length > 0) {
-			if (user.id.length < 5) {
+			if (user.id.length < 3) {
 				errors.push({
 					field: 'id',
-					message: 'IDは5文字以上で入力してください'
+					message: 'IDは3文字以上で入力してください'
 				});
 			}
 
@@ -51,4 +51,4 @@ export const validateUserForm = (user: UserFormData, isSignUp: boolean): Validat
 // パスワード強度の警告メッセージを取得するサービス //
 export const getPasswordWarning = (zxcvbnResult: any): string | null => {
 	return zxcvbnResult?.feedback?.warning || null;
-}; 
+};
