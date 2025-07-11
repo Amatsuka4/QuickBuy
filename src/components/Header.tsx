@@ -1,7 +1,6 @@
 import { useAuthContext } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { AuthNavigation } from "./HeaderAuthNav";
-import { LoadingSpinner } from "./AppLoadingSpinner";
 
 export default function Header() {
 	const { user, isLoading } = useAuthContext();
@@ -12,7 +11,7 @@ export default function Header() {
 				<div className="text-2xl font-bold text-gray-700 underline italic">
 					<Link to="/">Codeal</Link>
 				</div>
-				{isLoading ? <LoadingSpinner /> : <AuthNavigation user={user} />}
+				{isLoading ? null : <AuthNavigation user={user} />}
 			</div>
 		</header>
 	);
