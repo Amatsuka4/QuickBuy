@@ -49,6 +49,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 				// ログイン時にユーザープロファイルを取得 //
 				const profile = await getUserProfile(user.uid);
 				setUserProfile(profile);
+				console.log(profile);
 			} else {
 				// ユーザーがログアウトした場合、プロファイルをクリア //
 				setUserProfile(null);

@@ -2,7 +2,7 @@ import type { Timestamp } from "firebase/firestore";
 
 export interface UserProfile {
 	displayName: string;
-	userId: string;
+	username: string;
 	createdAt: Timestamp;
 	iconUrl: string;
 }
