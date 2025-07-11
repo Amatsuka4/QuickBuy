@@ -1,16 +1,22 @@
 import { AuthProvider } from "./contexts/AuthContext";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import Home from "./pages/Home";
+import Store from "./pages/Store";
+import NotFound from "./pages/NotFound";
+import Settings from "./pages/Settings";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
 	return (
 		<AuthProvider>
 			<Header />
-			<main className="w-screen h-[calc(100vh-400px)]">
-				<div className="w-full h-full flex items-center justify-center">
-					<h1 className="text-4xl font-bold">Codeal</h1>
-				</div>
-			</main>
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="/:username" element={<Store />} />
+				<Route path="/settings" element={<Settings />} />
+				<Route path="*" element={<NotFound />} />
+			</Routes>
 			<Footer />
 		</AuthProvider>
 	);

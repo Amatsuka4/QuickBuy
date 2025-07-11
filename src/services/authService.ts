@@ -41,7 +41,7 @@ export async function signUpService(email: string, password: string, name: strin
 
 		await setDoc(doc(db, "users", uid), {
 			displayName: name,
-			userId: id,
+			username: id,
 			createdAt: serverTimestamp(),
 			iconUrl: "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
 		});

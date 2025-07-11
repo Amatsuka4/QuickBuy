@@ -72,7 +72,7 @@ export default function UserMenuDropdown({ isOpen, onClose }: { isOpen: boolean;
 						<p className="text-sm font-medium text-gray-900 truncate">
 							{userProfile?.displayName || "ユーザー"}
 						</p>
-						<p className="text-xs text-gray-500 truncate">@{userProfile?.userId || "user"}</p>
+						<p className="text-xs text-gray-500 truncate">@{userProfile?.username || "user"}</p>
 						<p className="text-xs text-gray-500 truncate">{shortenMailAddress(user?.email || "")}</p>
 					</div>
 				</div>
@@ -81,7 +81,7 @@ export default function UserMenuDropdown({ isOpen, onClose }: { isOpen: boolean;
 			{/* メニューアイテム */}
 			<div className="py-1">
 				<Link
-					to={`/@${userProfile?.userId}`}
+					to={`/@${userProfile?.username}`}
 					className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 cursor-pointer focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
 					role="menuitem"
 					tabIndex={0}
