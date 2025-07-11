@@ -1,6 +1,6 @@
 import { useAuthContext } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
-import { AuthNavigation } from "./HeaderAuthNav";
+import { AuthNavigation } from "./HeaderNav";
 
 export default function Header() {
 	const { user, isLoading } = useAuthContext();
