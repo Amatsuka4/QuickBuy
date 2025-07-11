@@ -6,7 +6,11 @@ function App() {
 	return (
 		<AuthProvider>
 			<Header />
-			<h1>Hello</h1>
+			<main className="w-screen h-[calc(100vh-400px)]">
+				<div className="w-full h-full flex items-center justify-center">
+					<h1 className="text-4xl font-bold">Codeal</h1>
+				</div>
+			</main>
 			<Footer />
 		</AuthProvider>
 	);

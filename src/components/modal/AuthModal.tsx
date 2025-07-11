@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal } from "./Modal";
+import { Modal } from "./BaseModal";
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
 import type { ZxcvbnResult } from "@zxcvbn-ts/core/src/types";
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
@@ -87,7 +87,6 @@ export const AuthModal = ({
 
 			if (result.success) {
 				setIsModalOpen(null);
-				window.location.reload();
 			} else {
 				setError(result.error || "認証に失敗しました");
 			}

@@ -1,12 +1,10 @@
-import { auth } from "../firebase";
 import { useAuthContext } from "../contexts/AuthContext";
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AuthModal } from "./modal/AuthModal";
+import { AuthNavigation } from "./HeaderAuthNav";
+import { LoadingSpinner } from "./AppLoadingSpinner";
 
 export default function Header() {
-	const [isOpenModalId, setIsOpenModalId] = useState<string | null>(null);
-	const { user, userProfile, isLoading } = useAuthContext();
+	const { user, isLoading } = useAuthContext();
 
 	return (
 		<header className="bg-white shadow-md">
@@ -14,40 +12,7 @@ export default function Header() {
 				<div className="text-2xl font-bold text-gray-700 underline italic">
 					<Link to="/">Codeal</Link>
 				</div>
-				{isLoading ? null : user ? (
-					<nav className="flex items-center space-x-4">
-						<div className="text-gray-700">
-							<h1 className="font-bold">{userProfile?.displayName}</h1>
-							{userProfile?.userId && <p className="text-sm text-gray-500">@{userProfile.userId}</p>}
-						</div>
-						<button
-							className="cursor-pointer hover:text-gray-500 transition-colors"
-							onClick={() => {
-								auth.signOut();
-								window.location.reload();
-							}}
-						>
-							SignOut
-						</button>
-					</nav>
-				) : (
-					<nav className="space-x-4">
-						<button
-							onClick={() => setIsOpenModalId("signup")}
-							className="cursor-pointer hover:text-gray-500 transition-colors bg-blue-500 text-white px-4 py-2 rounded-md"
-						>
-							SignUp
-						</button>
-						<AuthModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} mode="signup" />
-						<button
-							onClick={() => setIsOpenModalId("signin")}
-							className="cursor-pointer hover:text-gray-500 transition-colors bg-blue-500 text-white px-4 py-2 rounded-md"
-						>
-							SignIn
-						</button>
-						<AuthModal isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} mode="signin" />
-					</nav>
-				)}
+				{isLoading ? <LoadingSpinner /> : <AuthNavigation user={user} />}
 			</div>
 		</header>
 	);
