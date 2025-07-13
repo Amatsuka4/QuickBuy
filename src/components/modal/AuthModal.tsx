@@ -159,7 +159,7 @@ export const AuthModal = ({
 								value={user.id}
 								onChange={(e) => setUser({ ...user, id: e.target.value })}
 								aria-label="ID"
-								minLength={5}
+								minLength={3}
 								maxLength={16}
 								pattern="^[a-zA-Z0-9]+$"
 								required

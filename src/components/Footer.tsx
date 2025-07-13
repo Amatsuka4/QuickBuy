@@ -13,6 +13,10 @@ export default function Footer() {
 				<a href="https://x.com/29719" target="_blank" className="text-sm">
 					X(Twitter)
 				</a>
+				{/* デバッグ用 後で削除 */}
+				<Link to="/@demo" className="text-sm">
+					@demoにアクセス
+				</Link>
 			</nav>
 			<div className="container mx-auto px-4">
 				<p className="text-center text-xs">© 2025 Codeal. All rights reserved.</p>
