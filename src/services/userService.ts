@@ -18,3 +18,24 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
 		return null;
 	}
 }
+
+export async function getUserProfileByUsername(username: string): Promise<UserProfile | null> {
+	try {
+		if (username.startsWith("@")) {
+			username = username.slice(1);
+		}
+
+		const userRef = doc(db, "usernames", username);
+		const userSnap = await getDoc(userRef);
+
+		if (userSnap.exists()) {
+			const uid = userSnap.data().uid;
+			return await getUserProfile(uid);
+		}
+
+		return null;
+	} catch (error) {
+		console.error("ユーザープロファイルの取得に失敗しました:", error);
+		return null;
+	}
+}
