@@ -13,7 +13,7 @@ export default function Store() {
 	const [externalUserProfile, setExternalUserProfile] = useState<UserProfile | null>(null);
 	const [loading, setLoading] = useState(false);
 
-	const isOwnStore = username === "@" + authUserProfile?.username;
+	const isOwnStore = username === authUserProfile?.username;
 	const displayProfile = isOwnStore ? authUserProfile : externalUserProfile;
 
 	// 他人のショップの場合のみFirestoreから取得
