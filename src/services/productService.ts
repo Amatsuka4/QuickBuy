@@ -1,11 +1,10 @@
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 
-export async function getProducts(uid: string) {
-	const productsRef = collection(db, "users", uid, "products");
-    console.log(productsRef);
+export async function getProducts(username: string) {
+	const productsRef = collection(db, "users", username, "products");
     const productsSnap = await getDocs(productsRef);
-    console.log(productsSnap.docs);
     const products = productsSnap.docs.map((doc) => doc.data());
+    console.log(products);
     return products;
 }

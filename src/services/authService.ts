@@ -5,7 +5,7 @@ import { FirebaseError } from "firebase/app";
 import type { AuthError } from "firebase/auth";
 
 // エラーメッセージを日本語に変換する関数 //
-const getErrorMessage = (error: AuthError): string => {
+function getErrorMessage(error: AuthError): string {
 	switch (error.code) {
 		case "auth/email-already-exists":
 			return "このメールアドレスは既に使用されています。";
@@ -24,13 +24,13 @@ const getErrorMessage = (error: AuthError): string => {
 		default:
 			return `認証エラーが発生しました。エラーコード: ${error.code}`;
 	}
-};
+}
 
 // 新規登録サービス //
 export async function signUpService(email: string, password: string, name: string, id: string): Promise<{ success: boolean; error?: string }> {
 	try {
 		// ID予約チェック //
-		const usernameRef = doc(db, "usernames", id);
+		const usernameRef = doc(db, "users", id);
 		const usernameSnap = await getDoc(usernameRef);
 		if (usernameSnap.exists()) {
 			return { success: false, error: "このIDは既に使用されています。" };
@@ -39,14 +39,13 @@ export async function signUpService(email: string, password: string, name: strin
 		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 		const uid = userCredential.user.uid;
 
-		await setDoc(doc(db, "users", uid), {
+		await setDoc(usernameRef, {
 			displayName: name,
-			username: id,
 			createdAt: serverTimestamp(), // TODO: 後々、改ざん防止のため、サーバー側で制御するように変更
 			iconUrl: "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
 		});
 
-		await setDoc(usernameRef, { uid }, { merge: false });
+		await setDoc(doc(db, "usernames", uid), { id }, { merge: false });
 
 		return { success: true };
 	} catch (error) {

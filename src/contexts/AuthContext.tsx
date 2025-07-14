@@ -4,6 +4,7 @@ import type { User } from "firebase/auth";
 import { auth } from "../firebase";
 import { getUserProfile } from "../services/userService";
 import type { UserProfile } from "../types/user";
+import { getUsernameByUid } from "../services/userService";
 
 // 認証コンテキストの型定義 //
 interface AuthContextType {
@@ -47,7 +48,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 			if (user) {
 				// ログイン時にユーザープロファイルを取得 //
-				const profile = await getUserProfile(user.uid);
+				const username = await getUsernameByUid(user.uid);
+				if (!username) return;
+				const profile = await getUserProfile(username);
 				setUserProfile(profile);
 				console.log(profile);
 			} else {

@@ -3,9 +3,10 @@ import { db } from "../firebase";
 import type { UserProfile } from "../types/user";
 
 // ユーザープロファイルを取得する関数 //
-export async function getUserProfile(uid: string): Promise<UserProfile | null> {
+export async function getUserProfile(username: string): Promise<UserProfile | null> {
 	try {
-		const userRef = doc(db, "users", uid);
+
+		const userRef = doc(db, "users", username);
 		const userSnap = await getDoc(userRef);
 
 		if (userSnap.exists()) {
@@ -19,23 +20,17 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
 	}
 }
 
-export async function getUserProfileByUsername(username: string): Promise<UserProfile | null> {
+export async function getUsernameByUid(uid: string): Promise<string | null> {
 	try {
-		if (username.startsWith("@")) {
-			username = username.slice(1);
-		}
-
-		const userRef = doc(db, "usernames", username);
+		const userRef = doc(db, "usernames", uid);
 		const userSnap = await getDoc(userRef);
-
-		if (userSnap.exists()) {
-			const uid = userSnap.data().uid;
-			return await getUserProfile(uid);
-		}
-
-		return null;
+		return userSnap.data()?.id || null;
 	} catch (error) {
-		console.error("ユーザープロファイルの取得に失敗しました:", error);
+		console.error("ユーザーIDの取得に失敗しました:", error);
 		return null;
 	}
+}
+
+export async function getUserProfileByUsername(username: string): Promise<UserProfile | null> {
+	return await getUserProfile(username);
 }
