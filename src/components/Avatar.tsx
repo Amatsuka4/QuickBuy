@@ -16,7 +16,7 @@ const sizeClasses = {
 };
 
 export default function Avatar({ src, alt, size, rounded = true }: AvatarProps) {
-	const defaultAvatarUrl =
+	const defaultAvatarUrl = // TODO: ここ意味わからないから後で変更
 		"https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg";
 
 	return (

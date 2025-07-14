@@ -9,6 +9,7 @@ import shortenMailAddress from "../utils/shortenMailAddres";
 export default function UserMenuDropdown({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
 	const { user, userProfile } = useAuthContext();
 	const dropdownRef = useRef<HTMLDivElement>(null);
+	console.log(userProfile);
 
 	// ドロップダウン外でのクリックで閉じる
 	const handleClickOutside = useCallback(

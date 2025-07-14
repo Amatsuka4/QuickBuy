@@ -41,6 +41,7 @@ export async function signUpService(email: string, password: string, name: strin
 
 		await setDoc(usernameRef, {
 			displayName: name,
+			username: id,
 			createdAt: serverTimestamp(), // TODO: 後々、改ざん防止のため、サーバー側で制御するように変更
 			iconUrl: "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
 		});
