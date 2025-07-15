@@ -6,6 +6,7 @@ import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnJaPackage from "@zxcvbn-ts/language-ja";
 import { signUpService, signInService } from "../../services/authService";
 import { validateUserForm, getPasswordWarning } from "../../utils/validationCheck";
+import CloseButton from "./CloseButton";
 
 // Zxcvbnの初期設定 //
 zxcvbnOptions.setOptions({
@@ -129,12 +130,7 @@ export const AuthModal = ({
 	return (
 		<Modal isOpen={isOpenModalId === mode} onClose={() => setIsModalOpen(null)}>
 			<div className="relative bg-white rounded-lg p-8 w-full max-w-md mx-auto" onClick={(e) => e.stopPropagation()}>
-				<button
-					className="absolute top-2 right-4 z-[999] p-1 text-black hover:text-gray-700 transition-colors cursor-pointer"
-					onClick={() => setIsModalOpen(null)}
-				>
-					X
-				</button>
+				<CloseButton onClick={() => setIsModalOpen(null)} />
 				<h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">{title}</h1>
 
 				<form className="space-y-4" onSubmit={handleSubmit}>

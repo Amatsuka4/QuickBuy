@@ -5,6 +5,8 @@ import type { UserProfile } from "../types/user";
 import Avatar from "../components/Avatar";
 import { useAuthContext } from "../contexts/AuthContext";
 import ProductList from "../components/ProductList";
+import ProductModal from "../components/modal/ProductModal";
+import type { Product } from "../types/product";
 
 export default function Store() {
 	// URLから取得したユーザー名から@を削除
@@ -12,6 +14,8 @@ export default function Store() {
 	const { userProfile: authUserProfile } = useAuthContext();
 	const [externalUserProfile, setExternalUserProfile] = useState<UserProfile | null>(null);
 	const [loading, setLoading] = useState(false);
+	const [isOpenModalId, setIsOpenModalId] = useState<string | null>(null);
+	const [product, setProduct] = useState<Product | null>(null);
 
 	const isOwnStore = username === authUserProfile?.username;
 	const displayProfile = isOwnStore ? authUserProfile : externalUserProfile;
@@ -29,6 +33,11 @@ export default function Store() {
 
 		fetchAndSetProfile(username);
 	}, [username, isOwnStore]);
+
+	const handleProductClick = (productId: string, product: Product) => {
+		setProduct(product);
+		setIsOpenModalId(productId);
+	};
 
 	if (loading) {
 		return <div className="flex flex-col items-center justify-center">読み込み中...</div>;
@@ -50,7 +59,8 @@ export default function Store() {
 			</div>
 
 			<h1 className="text-2xl font-bold mb-4">商品一覧</h1>
-			<ProductList username={username ?? ""} />
+			<ProductList username={username ?? ""} handleProductClick={handleProductClick} />
+			{product && <ProductModal product={product} isOpenModalId={isOpenModalId} setIsModalOpen={setIsOpenModalId} />}
 		</main>
 	);
 }

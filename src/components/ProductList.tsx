@@ -20,11 +20,22 @@ const useProductFilter = (products: Product[], selectedTags: string[], searchQue
 	}, [products, selectedTags, searchQuery]);
 };
 
-function ProductCard({ product, handleTagClick }: { product: Product; handleTagClick: (tag: string) => void }) {
+function ProductCard({
+	product,
+	handleTagClick,
+	handleProductClick,
+}: {
+	product: Product;
+	handleTagClick: (tag: string) => void;
+	handleProductClick: (id: string, product: Product) => void;
+}) {
 	return (
-		<div className="flex flex-col h-full border border-gray-300 rounded-md shadow-md hover:shadow-lg hover:scale-101 hover:border-blue-500 transition-all duration-300 cursor-pointer">
+		<div
+			className="flex flex-col h-full border border-gray-300 rounded-md shadow-md hover:shadow-lg hover:scale-101 hover:border-blue-500 transition-all duration-300 cursor-pointer"
+			onClick={() => handleProductClick(product.productId, product)}
+		>
 			<img
-				src="https://picsum.photos/200/300" //{product.imageUrl}
+				src="https://picsum.photos/800/800" //{product.imageUrl}
 				alt={product.name}
 				className="w-full h-48 object-cover rounded-t-md"
 			/>
@@ -57,7 +68,13 @@ function ProductCard({ product, handleTagClick }: { product: Product; handleTagC
 	);
 }
 
-export default function ProductList({ username }: { username: string }) {
+export default function ProductList({
+	username,
+	handleProductClick,
+}: {
+	username: string;
+	handleProductClick: (id: string, product: Product) => void;
+}) {
 	const [products, setProducts] = useState<Product[]>([]);
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [searchQuery, setSearchQuery] = useState<string>("");
@@ -143,7 +160,12 @@ export default function ProductList({ username }: { username: string }) {
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 				{filteredProducts.map((product) => (
-					<ProductCard key={product.productId} product={product} handleTagClick={handleTagClick} />
+					<ProductCard
+						key={product.productId}
+						product={product}
+						handleTagClick={handleTagClick}
+						handleProductClick={handleProductClick}
+					/>
 				))}
 			</div>
 		</div>
