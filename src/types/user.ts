@@ -5,6 +5,8 @@ export interface UserProfile {
 	username: string;
 	createdAt: Timestamp;
 	iconUrl: string;
+	bio: string;
+	tags: string[];
 }
 
 export interface UserFormData {
