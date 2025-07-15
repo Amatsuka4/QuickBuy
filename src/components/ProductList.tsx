@@ -87,7 +87,7 @@ export default function ProductList({ username }: { username: string }) {
 
 	return (
 		<div className="w-3/4 mx-auto">
-			<p className="text-sm text-gray-500 mb-2">商品一覧</p>
+			<p className="text-sm text-gray-500 mb-2">絞り込み</p>
 			<div className="w-full flex flex-between mb-4 gap-2">
 				{/* タグフィルター */}
 				<div className="flex flex-wrap gap-2 mb-4 flex-3">

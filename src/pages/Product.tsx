@@ -49,7 +49,7 @@ export default function Store() {
 				</div>
 			</div>
 
-			<h1 className="text-2xl font-bold mb-4">Products</h1>
+			<h1 className="text-2xl font-bold mb-4">商品一覧</h1>
 			<ProductList username={username ?? ""} />
 		</main>
 	);
