@@ -20,7 +20,7 @@ const useProductFilter = (products: Product[], selectedTags: string[], searchQue
 	}, [products, selectedTags, searchQuery]);
 };
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product, handleTagClick }: { product: Product; handleTagClick: (tag: string) => void }) {
 	return (
 		<div className="flex flex-col h-full border border-gray-300 rounded-md shadow-md hover:shadow-lg hover:scale-101 hover:border-blue-500 transition-all duration-300 cursor-pointer">
 			<img
@@ -31,7 +31,11 @@ function ProductCard({ product }: { product: Product }) {
 			<div className="p-4 flex flex-col gap-2 flex-1 h-full">
 				<p className="text-sm text-blue-500">
 					{product.tags.map((tag, idx) => (
-						<span key={idx} className="mr-1 text-blue-500 hover:text-blue-700">
+						<span
+							key={idx}
+							className="mr-1 text-blue-500 hover:text-blue-700"
+							onClick={() => handleTagClick(tag)}
+						>
 							#{tag}
 						</span>
 					))}
@@ -139,7 +143,7 @@ export default function ProductList({ username }: { username: string }) {
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 				{filteredProducts.map((product) => (
-					<ProductCard key={product.productId} product={product} />
+					<ProductCard key={product.productId} product={product} handleTagClick={handleTagClick} />
 				))}
 			</div>
 		</div>
