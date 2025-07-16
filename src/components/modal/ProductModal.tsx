@@ -80,7 +80,7 @@ export default function ProductModal({ product, isOpenModalId, setIsModalOpen }:
 					</div>
 
 					{/* 商品情報 */}
-					<div className="lg:w-1/2 p-6 lg:p-8 flex flex-col">
+					<div className="lg:w-1/2 p-6 lg:p-8 flex flex-col overflow-y-auto max-h-[90vh]">
 						{/* 商品名 */}
 						<h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
 
@@ -203,7 +203,7 @@ export default function ProductModal({ product, isOpenModalId, setIsModalOpen }:
 						{/* アクションボタン */}
 						<div className="mt-6 flex gap-3">
 							<button className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 cursor-pointer">
-								カートに追加
+								この商品を購入する
 							</button>
 							<button className="px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
 								<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

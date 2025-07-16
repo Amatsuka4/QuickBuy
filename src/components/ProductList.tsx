@@ -79,6 +79,12 @@ export default function ProductList({
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [searchQuery, setSearchQuery] = useState<string>("");
 
+	// ページ遷移時にタグ選択をリセット
+	useEffect(() => {
+		setSelectedTags([]);
+		setSearchQuery("");
+	}, [username]);
+
 	// 商品の取得
 	useEffect(() => {
 		fetchProducts(username).then((products) => {
