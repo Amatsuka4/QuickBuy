@@ -31,9 +31,23 @@ function ProductCard({
 }) {
 	return (
 		<div
-			className="flex flex-col h-full border border-gray-300 rounded-md shadow-md hover:shadow-lg hover:scale-101 hover:border-blue-500 transition-all duration-300 cursor-pointer"
+			className="relative flex flex-col h-full border border-gray-300 rounded-md shadow-md hover:shadow-lg hover:scale-101 hover:border-blue-500 transition-all duration-300 cursor-pointer"
 			onClick={() => handleProductClick(product.productId, product)}
 		>
+			{/* 商品ステータスバッジ */}
+			<div className="absolute top-4 left-4">
+				<span
+					className={`px-3 py-1 rounded-full text-xs font-medium ${
+						product.status === "available"
+							? "bg-green-100 text-green-800"
+							: product.status === "soldOut"
+							? "bg-gray-100 text-gray-800"
+							: "bg-yellow-100 text-yellow-800"
+					}`}
+				>
+					{product.status === "available" ? "販売中" : product.status === "soldOut" ? "売り切れ" : "非公開"}
+				</span>
+			</div>
 			<img
 				src="https://picsum.photos/800/800" //{product.imageUrl}
 				alt={product.name}
