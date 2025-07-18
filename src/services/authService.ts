@@ -5,6 +5,7 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 
 const functions = getFunctions();
 
+// Firebase認証エラーコードを日本語のユーザー向けメッセージに変換
 function getErrorMessage(error: AuthError): string {
     switch (error.code) {
         case "auth/email-already-exists":
@@ -30,27 +31,34 @@ const createUserProfileFunction = httpsCallable(functions, 'createUserProfile');
 
 export async function signUpService(email: string, password: string, name: string, id: string): Promise<{ success: boolean; error?: string }> {
     try {
+        // 1. Firebase Authenticationでアカウント作成
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-		await userCredential.user.getIdToken(true);
-        const uid = userCredential.user.uid;
+        await userCredential.user.getIdToken(true);
 
+        // 2. Cloud FunctionsでユーザープロフィールをFirestoreに保存
         const result = await createUserProfileFunction({
-            userId: uid,
-            name: name,
-            id: id,
+            userId: userCredential.user.uid,
+            displayName: name,
+            username: id,
         });
 
         if (result.data && (result.data as { success: boolean }).success) {
+            console.log("ユーザープロフィールの作成に成功しました");
+            console.log(result.data);
             return { success: true };
         } else {
+            // プロフィール作成に失敗した場合、作成済みのFirebase Authアカウントを削除（ロールバック）
+            await userCredential.user.delete();
             return { success: false, error: "ユーザープロフィールの作成に失敗しました。" };
         }
 
     } catch (error: any) {
         if (error instanceof FirebaseError) {
+            // Firebase認証エラーの場合
             if (error.code && error.code.startsWith('auth/')) {
                 return { success: false, error: getErrorMessage(error as AuthError) };
             }
+            // Cloud Functionsエラーの場合
             if (error.code && error.message) {
                 console.error("Cloud Functionエラー詳細:", error.message);
                 switch (error.code) {

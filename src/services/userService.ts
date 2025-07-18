@@ -20,6 +20,7 @@ export async function getUserProfile(username: string): Promise<UserProfile | nu
 	}
 }
 
+// ユーザーIDからユーザー名を取得
 export async function getUsernameByUid(uid: string): Promise<string | null> {
 	try {
 		const userRef = doc(db, "usernames", uid);
@@ -29,8 +30,4 @@ export async function getUsernameByUid(uid: string): Promise<string | null> {
 		console.error("ユーザーIDの取得に失敗しました:", error);
 		return null;
 	}
-}
-
-export async function getUserProfileByUsername(username: string): Promise<UserProfile | null> {
-	return await getUserProfile(username);
 }
