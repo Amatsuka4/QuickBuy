@@ -29,10 +29,8 @@ const ERROR_MESSAGES = {
 
 const DEFAULT_USER_DATA = {
     bio: "",
-    tokens: 0,
     iconUrl:
         "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
-    tags: [],
 };
 
 // ユーザーフォームデータのバリデーション
@@ -165,6 +163,25 @@ exports.createUserProfile = functions.https.onCall(async (request) => {
             const usernameRef = db.collection("usernames").doc(userId);
             transaction.set(usernameRef, {
                 id: trimmedUsername,
+            });
+
+            // ユーザーのproductsサブコレクション作成
+            const productsRef = userDocRef
+                .collection("products")
+                .doc("_placeholder");
+            transaction.set(productsRef, {
+                _placeholder: true,
+                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            });
+
+            // transactionsサブコレクション作成
+            const transactionsRef = userDocRef
+                .collection("transactions")
+                .doc("_placeholder");
+            transaction.set(transactionsRef, {
+                token: 0,
+                transactions: [],
+                createdAt: admin.firestore.FieldValue.serverTimestamp(),
             });
 
             return {
