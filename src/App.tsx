@@ -6,6 +6,7 @@ import Store from "./pages/Product";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 import { Routes, Route } from "react-router-dom";
+import AddProduct from "./pages/AddProduct";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/:username" element={<Store />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/add-product" element={<AddProduct />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />

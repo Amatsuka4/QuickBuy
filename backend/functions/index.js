@@ -4,6 +4,8 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
 
+const DEFAULT_USER_TOKEN = 100;
+
 // 定数定義
 const VALIDATION_CONSTANTS = {
     MIN_DISPLAY_NAME_LENGTH: 2,
@@ -31,6 +33,7 @@ const DEFAULT_USER_DATA = {
     bio: "",
     iconUrl:
         "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+    token: DEFAULT_USER_TOKEN,
 };
 
 // ユーザーフォームデータのバリデーション
@@ -179,7 +182,6 @@ exports.createUserProfile = functions.https.onCall(async (request) => {
                 .collection("transactions")
                 .doc("_placeholder");
             transaction.set(transactionsRef, {
-                token: 0,
                 transactions: [],
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
             });
